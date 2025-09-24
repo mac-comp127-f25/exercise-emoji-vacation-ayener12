@@ -32,8 +32,14 @@ public class EmojiVacation {
     }
 
     private static void doSlideShow(CanvasWindow canvas) {
+        while(true) {
+            generateVacationPhoto(canvas);
+            canvas.draw();
+            canvas.pause(3000);
+            canvas.removeAll();
+        }
+    
         // TODO: [Instructions step 8] Change this to an actual slideshow
-        generateVacationPhoto(canvas);
     }
 
     private static void generateVacationPhoto(CanvasWindow canvas) {
@@ -41,21 +47,44 @@ public class EmojiVacation {
 
         addSun(canvas);
 
+
         addCloudRows(canvas);
+        
+        addGround(canvas, 400);
 
         // TODO: [Instructions step 2] Create mountains 50% of the time.
         //       You should randomly determine the size and number of layers
         //       (within reasonable constraints).
+        int x = randomInt(0,100);
+        if (x <= 50) {
+            double baseY = 400;
+            double height = randomDouble(50,200);
+            int layers = randomInt(4,10);
+            addMountains(canvas, baseY, height, layers);
+        }
 
-        addGround(canvas, 400);
+
 
         // TODO: [Instructions step 2] Create forests 60% of the time. You should randomly
         //       determine the count for the number of trees. Pick reasonable values for
         //       other parameters.
+        int y = randomInt(0,100);
+         if (y <= 60) {
+            double forestBaseY = 400;
+            double forestHeight = randomDouble(100,200);
+            int treeAmount = randomInt(15,30);
+            addForest(canvas, forestBaseY, forestHeight, treeAmount);
+        }
 
         List<GraphicsGroup> family = createFamily(2, 3);
         positionFamily(family, 60, 550, 20);
+        for(GraphicsGroup person : family) {
+            canvas.add(person);
+        }
         // TODO: [Instructions step 4] Add each emoji in the list to the canvas
+    
+
+    
     }
 
     // –––––– Emoji family –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -70,12 +99,28 @@ public class EmojiVacation {
         // Hint: You can't use List.of() to do this, because you don't know the size of the
         // resulting list before the code actually runs. What can you use?
         //
-        return List.of(
-            createRandomEmoji(adultSize),
-            createRandomEmoji(childSize));
+    
+    List<GraphicsGroup> family  = new ArrayList<>();
+
+    for (int adults = 0; adults < adultCount; adults = adults +1) {
+        GraphicsGroup adult = createRandomEmoji(adultSize);
+        family.add(adult);
+    }
+    for (int kids = 0; kids < childCount; kids = kids + 1) {
+        GraphicsGroup child = createRandomEmoji(childSize);
+        family.add(child);
+    }
+    return(family);
     }
 
     private static GraphicsGroup createRandomEmoji(double size) {
+        switch (randomInt(0,4)) {
+            case 0: return ProvidedEmojis.createSmileyFace(size);
+            case 1: return ProvidedEmojis.createFrownyFace(size);
+            case 2: return ProvidedEmojis.createContentedFace(size);
+            case 3: return ProvidedEmojis.createNauseousFace(size);
+            case 4: return ProvidedEmojis.createWinkingFace(size);
+        }
         // TODO: [Instructions step 7] Change this so that instead of always creating a smiley face,
         //       it randomly selects one of the many available emojis.
         //
@@ -92,6 +137,15 @@ public class EmojiVacation {
             double baselineY,
             double spacing
     ) {
+        double currentX = leftX;
+        for(GraphicsGroup emoji : family) {
+            double width = emoji.getWidth();
+            double height = emoji.getHeight();
+            double topY = baselineY - height;
+            emoji.setPosition(currentX, topY);
+            currentX = currentX + width + spacing;
+
+        }
         // TODO: [Instructions step 5] Iterate over the emojis in the list,
         //       and position them all in a neat row
 
@@ -375,3 +429,23 @@ public class EmojiVacation {
         return Math.min(255, Math.max(0, c + randomInt(-amount, amount)));
     }
 }
+
+
+// public static GraphicsGroup createWinkingFace(double size) {
+//         GraphicsGroup group = new GraphicsGroup();
+
+//         group.add(createHead(size, size));
+
+//         GraphicsGroup leftEye = createEye(size * 0.15);
+//         leftEye.setCenter(size * 0.3, size * 0.3);
+//         group.add(leftEye);
+
+//         Line rightEye = createFlatEyelid(size * 0.15, 0);
+//         rightEye.setCenter(size * 0.7, size * 0.3);
+//         group.add(rightEye);
+
+//         Arc mouth = createSmile(size * 0.6, size * 0.5);
+//         mouth.setCenter(size * 0.5, size * 0.75);
+//         group.add(mouth);
+
+//         return group;
