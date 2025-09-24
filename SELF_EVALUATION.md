@@ -48,11 +48,13 @@ sentence or two in response to each question is plenty.
 
 **What did you miss? What did you wish you did better?**
 
-
+I think I did all of it, but I would like to do the optional exercise in the future.
 
 **What challenges did you face, and how did you overcome them?**
 
-
+I was confused on how to do the slideshow, I overcame this by looking at the canvas window decleration and perservering. 
 
 **What is something that was interesting or exciting, or a lesson you learned
   from this experience that you want to remember?**
+
+I learned to better use the for loops in Java.
